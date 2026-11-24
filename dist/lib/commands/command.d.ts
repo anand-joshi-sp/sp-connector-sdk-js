@@ -1,0 +1,218 @@
+/**
+ * SailPoint Standard Commands
+ */
+export declare enum StandardCommand {
+    StdAccountCreate = "std:account:create",
+    StdAccountDelete = "std:account:delete",
+    StdAccountDisable = "std:account:disable",
+    StdAccountDiscoverSchema = "std:account:discover-schema",
+    StdAccountEnable = "std:account:enable",
+    StdAccountList = "std:account:list",
+    StdAccountRead = "std:account:read",
+    StdAccountUnlock = "std:account:unlock",
+    StdAccountUpdate = "std:account:update",
+    StdAgentList = "std:agent:list",
+    StdMachineIdentityList = "std:machine-identity:list",
+    StdResourceList = "std:resource:list",
+    StdResourceDelete = "std:resource:delete",
+    StdResourceDisable = "std:resource:disable",
+    StdResourceEnable = "std:resource:enable",
+    StdAuthenticate = "std:authenticate",
+    StdEntitlementList = "std:entitlement:list",
+    StdEntitlementRead = "std:entitlement:read",
+    StdSpecRead = "std:spec:read",
+    StdTestConnection = "std:test-connection",
+    StdChangePassword = "std:change-password",
+    StdSourceDataDiscover = "std:source-data:discover",
+    StdSourceDataRead = "std:source-data:read",
+    StdConfigOptions = "std:config-options:read",
+    StdApplicationDiscoveryList = "std:application-discovery:list",
+    StdSsfStreamDiscover = "std:ssf-stream:discover",
+    StdSsfStreamRead = "std:ssf-stream:read",
+    StdSsfStreamCreate = "std:ssf-stream:create",
+    StdSsfStreamUpdate = "std:ssf-stream:update",
+    StdSsfStreamStatusUpdate = "std:ssf-stream:status-update",
+    StdSsfStreamDelete = "std:ssf-stream:delete",
+    StdSsfStreamVerify = "std:ssf-stream:verify",
+    StdSsfStreamReplace = "std:ssf-stream:replace"
+}
+/**
+ * Attributes map for account or entitlement
+ *
+ * Supported value types are:
+ * - boolean
+ * - string
+ * - integer
+ * - null
+ * - string[] or integer[] for multi-valued attributes
+ */
+export type Attributes = {
+    [attribute: string]: boolean | string | string[] | number | number[] | null;
+};
+export type Permission = {
+    target: string;
+    rights: string;
+    annotation?: string;
+};
+/**
+ * SchemaAttribute defines an attribute for schema
+ */
+export type SchemaAttribute = {
+    name: string;
+    description: string;
+    type: string;
+    required?: boolean;
+    multi?: boolean;
+    managed?: boolean;
+    schemaObjectType?: string;
+    entitlement?: boolean;
+};
+/**
+ * Configuration defines datasetType and datasetId for schema
+ */
+export type DatasetConfig = {
+    datasetType: string;
+    datasetId: string;
+};
+export type SimpleKeyType = {
+    simple: {
+        id: string;
+    };
+};
+export type CompoundKeyType = {
+    compound: {
+        lookupId: string;
+        uniqueId: string;
+    };
+};
+export type Key = SimpleKeyType | CompoundKeyType;
+export declare function KeyID(input: {
+    key: Key;
+}): string;
+export declare function KeyLookupID(input: {
+    key: Key;
+}): string;
+export declare function KeyUniqueID(input: {
+    key: Key;
+}): string;
+export declare function SimpleKey(id: string): SimpleKeyType;
+export declare function CompoundKey(lookupId: string, uniqueId: string): CompoundKeyType;
+export type ObjectInput = {
+    identity: string;
+    key: Key;
+};
+export type ObjectOutput = {
+    identity?: string;
+    uuid?: string;
+} & {
+    key?: Key;
+};
+/**
+ * State input for stateful command
+ */
+export type CommandState = {
+    [key: string]: any;
+};
+/**
+ * Configuration for a resource schema, containing dataset and resource identifiers.
+ */
+export type Configuration = {
+    datasetId: string;
+    resourceId: string;
+    resourceType: string;
+    [key: string]: unknown;
+};
+/**
+ * The common schema
+ */
+export type Schema = {
+    displayAttribute: string;
+    identityAttribute: string;
+    attributes: SchemaAttribute[];
+    name?: string;
+    nativeObjectType?: string | null;
+    configuration?: Configuration;
+};
+/**
+ * Account schema
+ */
+export type AccountSchema = Schema & {
+    groupAttribute: string;
+};
+/**
+ * Entitlement schema
+ */
+export type EntitlementSchema = Schema & {
+    type: string;
+    includePermissions?: boolean;
+};
+/**
+ * Dataset schema
+ * name is the name of the dataset being set by connector author from connector_spec.json, different from datasetId and datasetType
+ * groupAttribute is the name of the attribute for grouping the dataset
+ * config is the object contains datasetType and datasetId to identify the current dataset
+ */
+export type DatasetSchema = Schema & {
+    name: string;
+    groupAttribute?: string;
+    config: DatasetConfig;
+};
+/**
+ * Shared input fields for std:resource:* commands
+ */
+export type ResourceInput = {
+    datasetId: string;
+    schema?: Schema;
+};
+/**
+ * Classification of a resource object
+ */
+export type ResourceClassification = 'human' | 'machine' | null;
+/**
+ * Output object for std:resource:* commands
+ */
+export type ResourceOutput = {
+    identity: string;
+    datasetId: string;
+    resourceId: string;
+    attributes: Record<string, any>;
+    uuid?: string;
+    classification?: ResourceClassification;
+    deleted?: boolean;
+    disabled?: boolean;
+};
+/**
+ * Granular result for an attribute to indicate partial attribute level success & warning & failure
+ */
+export type Result = {
+    attribute: string;
+    status?: ResultStatus;
+    messages?: ResultMessage[];
+};
+/**
+ * Status for result
+ */
+export declare enum ResultStatus {
+    Error = "error"
+}
+/**
+ * Warning or error message for a result
+ */
+export type ResultMessage = {
+    level: ResultMessageLevel;
+    message: string;
+};
+/**
+ * Level for result message
+ */
+export declare enum ResultMessageLevel {
+    WARN = "WARN",
+    ERROR = "ERROR"
+}
+/**
+ * Data type for config options
+ */
+export type ConfigOptions = {
+    [options: string]: string | string[] | Record<string, string>[];
+};
+//# sourceMappingURL=command.d.ts.map

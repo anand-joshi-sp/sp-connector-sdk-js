@@ -1,0 +1,1 @@
+{"version":3,"file":"connector-spec.d.ts","sourceRoot":"","sources":["../../lib/connector-spec.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAA;AAC7C,OAAO,EAAE,iBAAiB,EAAE,MAAM,0BAA0B,CAAA;AAC5D,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAA;AACrC,OAAO,EAAE,OAAO,EAAE,MAAM,qBAAqB,CAAA;AAQ7C,eAAO,MAAM,yBAAyB,aAAoB,OAAO,UAAU,gBAAgB,OAAO,SAAS,iBAAiB,CAAC,kBAa5H,CAAA"}

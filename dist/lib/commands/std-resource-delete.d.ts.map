@@ -1,0 +1,1 @@
+{"version":3,"file":"std-resource-delete.d.ts","sourceRoot":"","sources":["../../../lib/commands/std-resource-delete.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,WAAW,EAAE,aAAa,EAAE,cAAc,EAAE,MAAM,WAAW,CAAA;AAEtE;;GAEG;AACH,MAAM,MAAM,sBAAsB,GAAG,WAAW,GAAG,aAAa,GAAG;IAClE,UAAU,EAAE,MAAM,CAAA;CAClB,CAAA;AAED;;GAEG;AACH,MAAM,MAAM,uBAAuB,GAAG,cAAc,CAAA"}

@@ -1,0 +1,95 @@
+import { StdAccountCreateInput, StdAccountCreateOutput, StdAccountDeleteInput, StdAccountDeleteOutput, StdAccountDisableInput, StdAccountDisableOutput, StdAccountDiscoverSchemaOutput, StdAccountEnableInput, StdAccountEnableOutput, StdAccountListOutput, StdAccountReadInput, StdAccountReadOutput, StdAccountUnlockInput, StdAccountUnlockOutput, StdAccountUpdateInput, StdAccountUpdateOutput, StdAgentListInput, StdAgentListOutput, StdMachineIdentityListInput, StdMachineIdentityListOutput, StdResourceListInput, StdResourceListOutput, StdResourceDeleteInput, StdResourceDeleteOutput, StdResourceDisableInput, StdResourceDisableOutput, StdResourceEnableInput, StdResourceEnableOutput, StdAuthenticateInput, StdAuthenticateOutput, StdConfigOptionsInput, StdConfigOptionsOutput, StdApplicationDiscoveryInputList, StdApplicationDiscoveryOutputList, StdEntitlementListInput, StdEntitlementListOutput, StdEntitlementReadInput, StdEntitlementReadOutput, StdTestConnectionOutput, StdChangePasswordInput, StdChangePasswordOutput, StdAccountListInput, StdSourceDataDiscoverInput, StdSourceDataDiscoverOutput, StdSourceDataReadInput, StdSourceDataReadOutput, StdTestConnectionInput, StdSsfStreamCreateInput, StdSsfStreamCreateOutput, StdSsfStreamDeleteInput, StdSsfStreamDeleteOutput, StdSsfStreamDiscoverInput, StdSsfStreamDiscoverOutput, StdSsfStreamReadInput, StdSsfStreamReadOutput, StdSsfStreamReplaceInput, StdSsfStreamReplaceOutput, StdSsfStreamStatusUpdateInput, StdSsfStreamStatusUpdateOutput, StdSsfStreamUpdateInput, StdSsfStreamUpdateOutput, StdSsfStreamVerifyInput, StdSsfStreamVerifyOutput, StdApplicationDiscoveryListInput, StdApplicationDiscoveryListOutput } from './commands';
+import { Response } from './response';
+/**
+ * Connector context object
+ */
+export interface Context {
+    id?: string;
+    name?: string;
+    version?: number;
+    connectorInstanceId?: string;
+    invocationId?: string;
+    spanId?: string;
+    requestId?: string;
+    commandType?: string;
+    [prop: string]: any;
+    reloadConfig(): Promise<any>;
+    assumeAwsRole(assumeAwsRoleRequest: AssumeAwsRoleRequest): Promise<AssumeAwsRoleResponse>;
+    /**
+     * Request body is forwarded to the runtime. See {@link OAuth2AccessTokenRequest};
+     * the connector runtime defines how the body is interpreted.
+     */
+    getOAuth2AccessToken(request: OAuth2AccessTokenRequest): Promise<OAuth2AccessTokenResponse>;
+}
+export declare class AssumeAwsRoleRequest {
+    roleArn: string;
+    externalId: string;
+    roleSessionName: string;
+    constructor(roleArn: string, externalId: string, roleSessionName: string);
+}
+export declare class AssumeAwsRoleResponse {
+    accessKeyId: string;
+    secretAccessKey: string;
+    sessionToken: string;
+    expiration: string;
+    constructor(accessKeyId: string, secretAccessKey: string, sessionToken: string, expiration: string);
+}
+/** Required credential fields for OAuth2 token refresh (flat request body). */
+export interface OAuth2RefreshCredentials {
+    provider: string;
+    refreshToken: string;
+    clientConfig?: Record<string, unknown>;
+}
+/**
+ * Request for {@link Context.getOAuth2AccessToken}: flat body with {@link OAuth2RefreshCredentials}
+ * plus any other keys the runtime forwards (`Record` allows optional envelope fields at the same level).
+ */
+export type OAuth2AccessTokenRequest = OAuth2RefreshCredentials & Record<string, unknown>;
+/** Typical response from SailPoint OAuth2 broker refresh. */
+export interface OAuth2TokenResponse {
+    accessToken: string;
+    expiry: string;
+    tokenType: string;
+    refreshToken?: string;
+    customAttributes?: Record<string, unknown>;
+}
+/**
+ * Response from {@link Context.getOAuth2AccessToken}. Broker refresh uses {@link OAuth2TokenResponse};
+ * other backends may return a different key set—see runtime documentation.
+ */
+export type OAuth2AccessTokenResponse = OAuth2TokenResponse | Record<string, unknown>;
+export type StdAccountCreateHandler = (context: Context, input: StdAccountCreateInput, res: Response<StdAccountCreateOutput>) => Promise<void>;
+export type StdAccountDeleteHandler = (context: Context, input: StdAccountDeleteInput, res: Response<StdAccountDeleteOutput>) => Promise<void>;
+export type StdAccountDisableHandler = (context: Context, input: StdAccountDisableInput, res: Response<StdAccountDisableOutput>) => Promise<void>;
+export type StdAccountDiscoverSchemaHandler = (context: Context, input: undefined, res: Response<StdAccountDiscoverSchemaOutput>) => Promise<void>;
+export type StdAccountEnableHandler = (context: Context, input: StdAccountEnableInput, res: Response<StdAccountEnableOutput>) => Promise<void>;
+export type StdAccountListHandler = (context: Context, input: StdAccountListInput, res: Response<StdAccountListOutput>) => Promise<void>;
+export type StdAccountReadHandler = (context: Context, input: StdAccountReadInput, res: Response<StdAccountReadOutput>) => Promise<void>;
+export type StdAccountUnlockHandler = (context: Context, input: StdAccountUnlockInput, res: Response<StdAccountUnlockOutput>) => Promise<void>;
+export type StdAccountUpdateHandler = (context: Context, input: StdAccountUpdateInput, res: Response<StdAccountUpdateOutput>) => Promise<void>;
+export type StdAuthenticateHandler = (context: Context, input: StdAuthenticateInput, res: Response<StdAuthenticateOutput>) => Promise<void>;
+export type StdEntitlementListHandler = (context: Context, input: StdEntitlementListInput, res: Response<StdEntitlementListOutput>) => Promise<void>;
+export type StdEntitlementReadHandler = (context: Context, input: StdEntitlementReadInput, res: Response<StdEntitlementReadOutput>) => Promise<void>;
+export type StdTestConnectionHandler = (context: Context, input: StdTestConnectionInput, res: Response<StdTestConnectionOutput>) => Promise<void>;
+export type StdChangePasswordHandler = (context: Context, input: StdChangePasswordInput, res: Response<StdChangePasswordOutput>) => Promise<void>;
+export type StdSourceDataDiscoverHandler = (context: Context, input: StdSourceDataDiscoverInput, res: Response<StdSourceDataDiscoverOutput>) => Promise<void>;
+export type StdSourceDataReadHandler = (context: Context, input: StdSourceDataReadInput, res: Response<StdSourceDataReadOutput>) => Promise<void>;
+export type CommandHandler = (context: Context, input: any, res: Response<any>) => Promise<void>;
+export type StdConfigOptionsHandler = (context: Context, input: StdConfigOptionsInput, res: Response<StdConfigOptionsOutput>) => Promise<void>;
+export type StdApplicationDiscoveryListHandler = (context: Context, input: StdApplicationDiscoveryInputList, res: Response<StdApplicationDiscoveryOutputList>) => Promise<void>;
+export type StdApplicationDiscoveryDatasetListHandler = (context: Context, input: StdApplicationDiscoveryListInput, res: Response<StdApplicationDiscoveryListOutput>) => Promise<void>;
+export type StdSsfStreamCreateHandler = (context: Context, input: StdSsfStreamCreateInput, res: Response<StdSsfStreamCreateOutput>) => Promise<void>;
+export type StdSsfStreamDeleteHandler = (context: Context, input: StdSsfStreamDeleteInput, res: Response<StdSsfStreamDeleteOutput>) => Promise<void>;
+export type StdSsfStreamDiscoverHandler = (context: Context, input: StdSsfStreamDiscoverInput, res: Response<StdSsfStreamDiscoverOutput>) => Promise<void>;
+export type StdSsfStreamReadHandler = (context: Context, input: StdSsfStreamReadInput, res: Response<StdSsfStreamReadOutput>) => Promise<void>;
+export type StdSsfStreamReplaceHandler = (context: Context, input: StdSsfStreamReplaceInput, res: Response<StdSsfStreamReplaceOutput>) => Promise<void>;
+export type StdSsfStreamStatusUpdateHandler = (context: Context, input: StdSsfStreamStatusUpdateInput, res: Response<StdSsfStreamStatusUpdateOutput>) => Promise<void>;
+export type StdSsfStreamUpdateHandler = (context: Context, input: StdSsfStreamUpdateInput, res: Response<StdSsfStreamUpdateOutput>) => Promise<void>;
+export type StdSsfStreamVerifyHandler = (context: Context, input: StdSsfStreamVerifyInput, res: Response<StdSsfStreamVerifyOutput>) => Promise<void>;
+export type StdAgentListHandler = (context: Context, input: StdAgentListInput, res: Response<StdAgentListOutput>) => Promise<void>;
+export type StdMachineIdentityListHandler = (context: Context, input: StdMachineIdentityListInput, res: Response<StdMachineIdentityListOutput>) => Promise<void>;
+export type StdResourceListHandler = (context: Context, input: StdResourceListInput, res: Response<StdResourceListOutput>) => Promise<void>;
+export type StdResourceDeleteHandler = (context: Context, input: StdResourceDeleteInput, res: Response<StdResourceDeleteOutput>) => Promise<void>;
+export type StdResourceDisableHandler = (context: Context, input: StdResourceDisableInput, res: Response<StdResourceDisableOutput>) => Promise<void>;
+export type StdResourceEnableHandler = (context: Context, input: StdResourceEnableInput, res: Response<StdResourceEnableOutput>) => Promise<void>;
+//# sourceMappingURL=connector-handler.d.ts.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"std-resource-disable.d.ts","sourceRoot":"","sources":["../../../lib/commands/std-resource-disable.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,WAAW,EAAE,aAAa,EAAE,cAAc,EAAE,MAAM,WAAW,CAAA;AAEtE;;GAEG;AACH,MAAM,MAAM,uBAAuB,GAAG,WAAW,GAAG,aAAa,GAAG;IACnE,UAAU,EAAE,MAAM,CAAA;CAClB,CAAA;AAED;;GAEG;AACH,MAAM,MAAM,wBAAwB,GAAG,cAAc,CAAA"}

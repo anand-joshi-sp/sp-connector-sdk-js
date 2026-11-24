@@ -1,0 +1,12 @@
+import { ObjectInput, ResourceInput, ResourceOutput } from './command';
+/**
+ * Input object of `std:resource:enable` command
+ */
+export type StdResourceEnableInput = ObjectInput & ResourceInput & {
+    resourceId: string;
+};
+/**
+ * Output object of `std:resource:enable` command
+ */
+export type StdResourceEnableOutput = ResourceOutput;
+//# sourceMappingURL=std-resource-enable.d.ts.map

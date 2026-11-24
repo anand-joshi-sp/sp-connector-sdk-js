@@ -1,0 +1,1 @@
+{"version":3,"file":"std-resource-list.d.ts","sourceRoot":"","sources":["../../../lib/commands/std-resource-list.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,aAAa,EAAE,cAAc,EAAE,MAAM,EAAE,MAAM,WAAW,CAAA;AAEjE;;GAEG;AACH,MAAM,MAAM,oBAAoB,GAAG,aAAa,GAAG;IAClD,OAAO,CAAC,EAAE,MAAM,EAAE,CAAA;CAClB,CAAA;AAED;;GAEG;AACH,MAAM,MAAM,qBAAqB,GAAG,cAAc,CAAA"}

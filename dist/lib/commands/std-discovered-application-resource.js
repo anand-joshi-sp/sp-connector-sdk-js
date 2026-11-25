@@ -156,6 +156,10 @@ function validateResourceLinks(value, identity) {
  * Returns true only for a discovered application: `resourceType === 'std:application'` and
  * `attributes.discovered === true`.
  *
+ * This is a gate, not a validation: it checks only the two discriminators, so the narrowed type
+ * promises nothing about `identity`, `datasetId` or `resourceId`. Follow it with
+ * {@link validateStdDiscoveredApplicationResourceOutput} for a full check.
+ *
  * Use this as the gate before any validation, so resources that are not discovered applications
  * (non-discovery `std:application` resources, `discovered: false`, accounts, agents, ...) are left alone.
  */
@@ -219,7 +223,9 @@ exports.validateStdDiscoveredApplicationResourceOutput = validateStdDiscoveredAp
  * whole command; to skip an invalid record instead, use `tryBuildStdDiscoveredApplicationResourceOutput`
  * or catch per record.
  *
- * The input is not mutated, and the returned `attributes` and `resourceLinks` are copies.
+ * The input is not mutated, and the returned `attributes` and `resourceLinks` are shallow copies: the
+ * array and the attribute map are new objects, but the individual link objects (and any nested values)
+ * are still shared with the caller.
  */
 function buildStdDiscoveredApplicationResourceOutput(input) {
     return validateStdDiscoveredApplicationResourceOutput({

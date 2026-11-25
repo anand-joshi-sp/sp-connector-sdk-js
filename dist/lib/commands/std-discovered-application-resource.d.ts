@@ -63,7 +63,9 @@ export type StdDiscoveredApplicationResourceOutput = Omit<ResourceOutput, 'class
  * Input accepted by `buildStdDiscoveredApplicationResourceOutput`. `resourceType` and `discovered`
  * are set by the builder; `resourceLinks` defaults to an empty array. `datasetId` is required here (pass the
  * handler's `input.datasetId`); `stdResourceList` and the other `std:resource:*` handlers overwrite it with the
- * command's `datasetId` on every output.
+ * command's `datasetId` on every output. The non-empty check on `datasetId` is deliberate even though the SDK
+ * overwrites the value: it catches handler wiring that forgot to pass `input.datasetId` (for example in a unit
+ * test or a local run) instead of hiding the mistake behind the stamping.
  */
 export type StdDiscoveredApplicationResourceBuilderInput = Omit<ResourceOutput, 'attributes' | 'classification' | 'resourceType' | 'resourceLinks'> & {
     attributes: Omit<StdDiscoveredApplicationKnownAttributes, 'discovered'> & {
@@ -82,29 +84,25 @@ export type StdDiscoveredApplicationResourceBuildResult = {
     success: false;
     error: ConnectorError;
 };
-declare const stringAttributes: readonly ["applicationName", "primaryAppName", "description", "secondaryAppName", "status", "connectorCategory", "logo", "appUrl", "createdAt", "updatedAt", "usersCount", "businessCriticality", "dataClassification", "businessUnit", "installType", "environment", "warrantyExpiration", "operationalStatus"];
-declare const numberAttributes: readonly ["licenseCount", "riskScore", "totalSigninsCount"];
-declare const booleanAttributes: readonly ["isSanctioned", "isBusiness", "isPrivileged"];
-declare const stringArrayAttributes: readonly ["applicationOwner", "itApplicationOwner"];
-declare const otherValidatedAttributes: readonly ["groups", "riskLevel", "discovered"];
 /**
  * Canonical attribute names of a discovered application. Connector-specific attributes should not reuse
  * these names with different spelling or casing.
  */
 export declare const STD_DISCOVERED_APPLICATION_ATTRIBUTE_NAMES: readonly string[];
-type ValidatedAttributeName = typeof stringAttributes[number] | typeof numberAttributes[number] | typeof booleanAttributes[number] | typeof stringArrayAttributes[number] | typeof otherValidatedAttributes[number];
-type AssertNever<T extends never> = T;
-export type StdDiscoveredApplicationUnvalidatedDiscoveryFields = AssertNever<Exclude<keyof Omit<StdApplicationDiscoveryListOutput, 'id' | 'attributes'>, ValidatedAttributeName>>;
 /**
  * Returns true only for a discovered application: `resourceType === 'std:application'` and
  * `attributes.discovered === true`.
  *
+ * This is a gate, not a validation: it checks only the two discriminators, so the narrowed type
+ * promises nothing about `identity`, `datasetId` or `resourceId`. Follow it with
+ * {@link validateStdDiscoveredApplicationResourceOutput} for a full check.
+ *
  * Use this as the gate before any validation, so resources that are not discovered applications
  * (non-discovery `std:application` resources, `discovered: false`, accounts, agents, ...) are left alone.
  */
-export declare function isDiscoveredApplicationResource(value: unknown): value is ResourceOutput & {
+export declare function isDiscoveredApplicationResource(value: unknown): value is Record<string, any> & {
     resourceType: typeof STD_APPLICATION_RESOURCE_TYPE;
-    attributes: {
+    attributes: Record<string, any> & {
         discovered: true;
     };
 };
@@ -124,7 +122,9 @@ export declare function validateStdDiscoveredApplicationResourceOutput(value: un
  * whole command; to skip an invalid record instead, use `tryBuildStdDiscoveredApplicationResourceOutput`
  * or catch per record.
  *
- * The input is not mutated, and the returned `attributes` and `resourceLinks` are copies.
+ * The input is not mutated, and the returned `attributes` and `resourceLinks` are shallow copies: the
+ * array and the attribute map are new objects, but the individual link objects (and any nested values)
+ * are still shared with the caller.
  */
 export declare function buildStdDiscoveredApplicationResourceOutput(input: StdDiscoveredApplicationResourceBuilderInput): StdDiscoveredApplicationResourceOutput;
 /**

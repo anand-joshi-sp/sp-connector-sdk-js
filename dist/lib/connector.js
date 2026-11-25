@@ -297,7 +297,20 @@ class Connector {
      * @param handler handler
      */
     stdResourceList(handler) {
-        return this.command(commands_1.StandardCommand.StdResourceList, this.injectDatasetId(handler));
+        const singleDatasetHandler = this.injectDatasetId(handler);
+        return this.command(commands_1.StandardCommand.StdResourceList, async (context, input, res) => {
+            if (!input ||
+                !('datasetIds' in input) ||
+                !Array.isArray(input.datasetIds) ||
+                input.datasetIds.length === 0) {
+                await singleDatasetHandler(context, input, res);
+                return;
+            }
+            const { datasetIds, ...sharedInput } = input;
+            for (const datasetId of (0, dataset_ids_1.uniqueDatasetIds)(datasetIds)) {
+                await singleDatasetHandler(context, { ...sharedInput, datasetId }, res);
+            }
+        });
     }
     /**
      * Add a handler for 'std:resource:delete' command

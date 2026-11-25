@@ -41,7 +41,7 @@ __exportStar(require("./std-source-data-discover"), exports);
 __exportStar(require("./std-source-data-read"), exports);
 __exportStar(require("./std-config-options-read"), exports);
 __exportStar(require("./std-application-discovery-list"), exports);
-__exportStar(require("./std-application-resource"), exports);
+__exportStar(require("./std-discovered-application-resource"), exports);
 __exportStar(require("./std-ssf-stream-create"), exports);
 __exportStar(require("./std-ssf-stream-delete"), exports);
 __exportStar(require("./std-ssf-stream-discover"), exports);
